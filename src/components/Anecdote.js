@@ -1,0 +1,17 @@
+import React from 'react'
+
+function Anecdote({ anecdote, handleClick }) {
+  return (
+    <div key={anecdote.id}>
+      <div>
+        {anecdote.content}
+      </div>
+      <div>
+        has {anecdote.votes}
+        <button onClick={handleClick}>vote</button>
+      </div>
+    </div>
+  )
+}
+
+export default Anecdote;
