@@ -1,19 +1,32 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Anecdote from './Anecdote';
-import { vote } from '../reducers/anecdoteReducer';
+import { vote } from '../reducers/anecdote.reducer';
+import { error, success, clear } from '../reducers/notification.reducer';
 
 const AnecdoteList = () => {
 
   const dispatch = useDispatch();
-  const anecdotes = useSelector(store => store);
+  const anecdotes = useSelector(store => store.anecdotes);
+
+  const handleClick = (anecdote) => {
+    try {
+      dispatch(vote(anecdote.id));
+      dispatch(success(`you voted for '${anecdote.content}'`));
+    } catch (e) {
+      dispatch(error(e.message));
+    }
+    setTimeout(() => {
+      dispatch(clear());
+    }, 5000);
+  }
 
   return (
     anecdotes.map(anecdote =>
       <Anecdote
         key={anecdote.id}
         anecdote={anecdote}
-        handleClick={() => dispatch(vote(anecdote.id))}
+        handleClick={() => handleClick(anecdote)}
       />
     )
   )
