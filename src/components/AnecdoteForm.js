@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { createAnecdote } from '../reducers/anecdote.reducer';
 import { clear, error, success } from '../reducers/notification.reducer';
 
-function AnecdoteForm() {
+const AnecdoteForm = () => {
 
   const dispatch = useDispatch();
 

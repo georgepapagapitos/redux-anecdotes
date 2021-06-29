@@ -1,6 +1,6 @@
 import React from 'react'
 
-function Anecdote({ anecdote, handleClick }) {
+const Anecdote = ({ anecdote, handleClick }) => {
   return (
     <div key={anecdote.id}>
       <div>

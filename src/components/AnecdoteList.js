@@ -7,7 +7,12 @@ import { error, success, clear } from '../reducers/notification.reducer';
 const AnecdoteList = () => {
 
   const dispatch = useDispatch();
-  const anecdotes = useSelector(store => store.anecdotes);
+  const anecdotes = useSelector(({ anecdotes, filter }) => {
+    if (filter === '') {
+      return anecdotes;
+    }
+    return anecdotes.filter(a => a.content.toLowerCase().includes(filter.toLowerCase()));
+  });
 
   const handleClick = (anecdote) => {
     try {
