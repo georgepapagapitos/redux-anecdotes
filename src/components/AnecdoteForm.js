@@ -2,7 +2,6 @@ import React from 'react'
 import { useDispatch } from 'react-redux';
 import { createAnecdote } from '../reducers/anecdote.reducer';
 import { clear, error, success } from '../reducers/notification.reducer';
-import { createNew } from '../services/anecdotes';
 
 const AnecdoteForm = () => {
 
@@ -13,8 +12,7 @@ const AnecdoteForm = () => {
     const content = event.target.anecdote.value;
     event.target.anecdote.value = '';
     try {
-      const newAnecdote = await createNew(content);
-      dispatch(createAnecdote(newAnecdote));
+      dispatch(createAnecdote(content));
       dispatch(success(`added a new anecdote!`));
     } catch (e) {
       dispatch(error('error adding a new anecdote'))
