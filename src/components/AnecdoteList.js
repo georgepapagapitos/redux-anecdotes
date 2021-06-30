@@ -1,29 +1,30 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Anecdote from './Anecdote';
+
 import { vote } from '../reducers/anecdote.reducer';
-import { error, success, clear } from '../reducers/notification.reducer';
+import { setNotification } from '../reducers/notification.reducer';
 
 const AnecdoteList = () => {
 
   const dispatch = useDispatch();
+
   const anecdotes = useSelector(({ anecdotes, filter }) => {
     if (filter === '') {
-      return anecdotes;
+      return anecdotes.sort((a, b) => a.votes > b.votes ? -1 : 1);
     }
-    return anecdotes.filter(a => a.content.toLowerCase().includes(filter.toLowerCase()));
+    return anecdotes
+      .filter(a => a.content.toLowerCase().includes(filter.toLowerCase()))
+      .sort((a, b) => a.votes > b.votes ? -1 : 1);
   });
 
   const handleClick = (anecdote) => {
     try {
-      dispatch(vote(anecdote.id));
-      dispatch(success(`you voted for '${anecdote.content}'`));
+      dispatch(vote(anecdote));
+      dispatch(setNotification(`you voted ${anecdote.content}`, 5));
     } catch (e) {
-      dispatch(error(e.message));
+      console.log(e)
     }
-    setTimeout(() => {
-      dispatch(clear());
-    }, 5000);
   }
 
   return (
@@ -31,7 +32,7 @@ const AnecdoteList = () => {
       <Anecdote
         key={anecdote.id}
         anecdote={anecdote}
-        handleClick={() => handleClick(anecdote)}
+        handleClick={handleClick}
       />
     )
   )

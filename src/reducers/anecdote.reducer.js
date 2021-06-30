@@ -1,15 +1,11 @@
-import { createNew, getAll } from "../services/anecdotes";
+import { addVote, createNew, getAll } from "../services/anecdotes";
 
 const anecdotesReducer = (state = [], action) => {
   switch (action.type) {
     case 'VOTE': {
       const id = action.payload.id;
-      const anecdoteToChange = state.find(a => a.id === id);
-      const changedAnecdote = {
-        ...anecdoteToChange,
-        votes: anecdoteToChange.votes + 1
-      }
-      return state.map(a => a.id !== id ? a : changedAnecdote)
+      const newAnecdote = state.find(a => a.id === id);
+      return state.map(a => a.id !== id ? a : newAnecdote)
     }
     case 'NEW_ANECDOTE':
       return [...state, action.payload];
@@ -20,12 +16,14 @@ const anecdotesReducer = (state = [], action) => {
   }
 }
 
-export const vote = (id) => {
+export const vote = (anecdoteObject) => {
+  anecdoteObject.votes = anecdoteObject.votes + 1;
   return async dispatch => {
-    await dispatch({
+    const newAnecdote = await addVote(anecdoteObject);
+    dispatch({
       type: 'VOTE',
-      payload: { id }
-    });
+      payload: newAnecdote
+    })
   }
 }
 

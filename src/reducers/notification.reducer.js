@@ -1,37 +1,33 @@
-const notificationReducer = (state = null, action) => {
+const notificationReducer = (state = '', action) => {
   switch (action.type) {
-    case 'ERROR':
-      return { ...state, message: action.payload.message };
-    case 'SUCCESS':
-      return { ...state, message: action.payload.message };
-    case 'CLEAR':
-      return null;
+    case 'SET_MESSAGE': {
+      clearTimeout(state.delay);
+      return action.payload;
+    }
+    case 'CLEAR_MESSAGE':
+      return '';
     default:
-      return null;
+      return state;
   }
 }
 
-export const success = (message) => {
-  return {
-    type: 'SUCCESS',
-    payload: {
-      message
-    }
+export const setNotification = (message, delay) => {
+  return async dispatch => {
+    dispatch({
+      type: 'SET_MESSAGE',
+      payload: {
+        message,
+        delay: setTimeout(() => {
+          dispatch(clearNotification(''));
+        }, delay * 1000)
+      }
+    })
   }
 }
 
-export const error = (message) => {
+export const clearNotification = () => {
   return {
-    type: 'ERROR',
-    payload: {
-      message
-    }
-  }
-}
-
-export const clear = () => {
-  return {
-    type: 'CLEAR'
+    type: 'CLEAR_MESSAGE'
   }
 }
 
